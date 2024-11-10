@@ -1,3 +1,15 @@
 <resources>
-    <string name="app_name">ComposeTestApplication</string>
+    <string name="app_name">ComposeGitApp</string>
+
+    <string name="search">Поиск</string>
+    <string name="search_repos">Поиск репозиториев</string>
+    <string name="search_users">Поиск пользователей</string>
+
+    <string name="downloads">Загрузки</string>
+    <string name="user_login">Никнейм:</string>
+    <string name="repo_name">Репозиторий:</string>
+    <string name="repo_description">Описание:</string>
+    <string name="enter_words">Введи запрос для поиска</string>
+    <string name="empty">пусто</string>
+    <string name="no_repos">Список репозиториев пуст</string>
 </resources>

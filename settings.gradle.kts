@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "ComposeTestApplication"
+rootProject.name = "ComposeGitHubApp"
 include(":app")
  
