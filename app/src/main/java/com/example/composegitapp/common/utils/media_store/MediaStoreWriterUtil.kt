@@ -1,4 +1,4 @@
-package com.example.composegitapp.common.utils.downloads
+package com.example.composegitapp.common.utils.media_store
 
 import android.Manifest
 import android.content.ContentResolver
@@ -11,6 +11,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
+import com.example.composegitapp.common.utils.downloads.IDownloadManager
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -18,7 +19,7 @@ import java.io.InputStream
 import java.io.OutputStream
 import javax.inject.Inject
 
-class MediaStoreUtils @Inject constructor(
+class MediaStoreWriterUtil @Inject constructor(
     private val downloadManager: IDownloadManager,
     private val contentResolver: ContentResolver,
     private val context: Context
@@ -27,13 +28,17 @@ class MediaStoreUtils @Inject constructor(
     /**
      * Writes a downloaded file to the Downloads folder using MediaStore API.
      */
-    fun writeFile(fileName: String, inputStream: InputStream): Uri? {
+    fun writeFile(
+        fileName: String,
+        inputStream: InputStream,
+        updateNotification: (Int) -> Unit
+    ): Uri? {
         val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             // Handle Android 10+ devices with MediaStore
-            writeFileToDownloadsWithMediaStore(fileName, inputStream)
+            writeFileToDownloadsWithMediaStore(fileName, inputStream, updateNotification)
         } else {
             // Handle pre-Android 10 devices (legacy approach)
-            writeFileToLegacyDownloads(fileName, inputStream)
+            writeFileToLegacyDownloads(fileName, inputStream, updateNotification)
         }
         uri?.let {
             downloadManager.sendEventDownloaded()
@@ -48,19 +53,22 @@ class MediaStoreUtils @Inject constructor(
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun writeFileToDownloadsWithMediaStore(
         fileName: String,
-        inputStream: InputStream
+        inputStream: InputStream,
+        updateNotification: (Int) -> Unit
     ): Uri? {
+
         val contentValues = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
             put(MediaStore.MediaColumns.MIME_TYPE, "application/zip")
             put(
                 MediaStore.MediaColumns.RELATIVE_PATH,
                 Environment.DIRECTORY_DOWNLOADS
-            ) // Downloads directory
+            )
         }
 
         val contentUri: Uri = MediaStore.Downloads.EXTERNAL_CONTENT_URI
         val fileUri: Uri? = contentResolver.insert(contentUri, contentValues)
+        val fileSize: Long = inputStream.available().toLong()
 
         try {
             fileUri?.let { uri ->
@@ -68,8 +76,13 @@ class MediaStoreUtils @Inject constructor(
                 outputStream?.use { output ->
                     val buffer = ByteArray(4096)
                     var bytesRead: Int
+                    var totalBytesWritten: Long = 0
                     while (inputStream.read(buffer).also { bytesRead = it } != -1) {
                         output.write(buffer, 0, bytesRead)
+                        totalBytesWritten += bytesRead
+
+                        val progress = calculateProgress(totalBytesWritten, fileSize)
+                        updateNotification(progress)
                     }
                     output.flush()
                 }
@@ -86,7 +99,11 @@ class MediaStoreUtils @Inject constructor(
      * For Android versions before Android 10 (legacy approach):
      * Write the file directly to the Download directory.
      */
-    private fun writeFileToLegacyDownloads(fileName: String, inputStream: InputStream): Uri? {
+    private fun writeFileToLegacyDownloads(
+        fileName: String,
+        inputStream: InputStream,
+        updateNotification: (Int) -> Unit
+    ): Uri? {
         // Check if permission is granted to write to external storage
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
             != PackageManager.PERMISSION_GRANTED
@@ -99,6 +116,7 @@ class MediaStoreUtils @Inject constructor(
         val downloadDir =
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
         val file = File(downloadDir, fileName)
+        val fileSize: Long = inputStream.available().toLong()
 
         try {
             // Create file if it doesn't exist
@@ -112,8 +130,13 @@ class MediaStoreUtils @Inject constructor(
                 outputStream.use { output ->
                     val buffer = ByteArray(4096)
                     var bytesRead: Int
+                    var totalBytesWritten: Long = 0
                     while (input.read(buffer).also { bytesRead = it } != -1) {
                         output.write(buffer, 0, bytesRead)
+                        totalBytesWritten += bytesRead
+
+                        val progress = calculateProgress(totalBytesWritten, fileSize)
+                        updateNotification(progress)
                     }
                     output.flush()
                 }
@@ -127,5 +150,14 @@ class MediaStoreUtils @Inject constructor(
         }
     }
 
+    private fun calculateProgress(totalBytesWritten: Long, fileSize: Long) =
+        ((totalBytesWritten * 100).safeDivide(fileSize)).toInt()
 
+    private fun Long.safeDivide(divisor: Long): Long {
+        return if (divisor != 0L) {
+            this / divisor
+        } else {
+            0L
+        }
+    }
 }

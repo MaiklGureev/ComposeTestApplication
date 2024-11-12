@@ -1,5 +1,6 @@
 package com.example.composegitapp.di
 
+import android.app.NotificationManager
 import android.content.ContentResolver
 import android.content.Context
 import android.content.SharedPreferences
@@ -8,7 +9,6 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
 import com.example.composegitapp.common.preferences.AppSettings
 import com.example.composegitapp.common.preferences.IAppSettings
-import com.example.composegitapp.common.utils.BrowserUtil
 import com.example.composegitapp.common.utils.downloads.DownloadManager
 import com.example.composegitapp.common.utils.downloads.IDownloadManager
 import dagger.Binds
@@ -20,10 +20,6 @@ import javax.inject.Singleton
 
 @Module(includes = [AppModuleBind::class])
 class AppModule {
-    @Provides
-    fun provideBrowserUtil(context: Context): BrowserUtil {
-        return BrowserUtil(context)
-    }
 
     @Provides
     fun provideContentResolver(context: Context): ContentResolver {
@@ -31,19 +27,26 @@ class AppModule {
     }
 
     @Provides
+    fun provideNotificationManager(context: Context): NotificationManager {
+        return context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    }
+
+    @Provides
     fun provideSharedPreferences(context: Context): SharedPreferences {
-        val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
-        return EncryptedSharedPreferences.create(
-            /* fileName = */ "secure_prefs",
-            /* masterKeyAlias = */
-            masterKeyAlias,
-            /* context = */
-            context,
-            /* prefKeyEncryptionScheme = */
-            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-            /* prefValueEncryptionScheme = */
-            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-        )
+        try {
+            val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
+
+            return EncryptedSharedPreferences.create(
+                "secure_prefs",
+                masterKeyAlias,
+                context,
+                EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return context.getSharedPreferences("secure_prefs", Context.MODE_PRIVATE)
+        }
     }
 
     @Provides

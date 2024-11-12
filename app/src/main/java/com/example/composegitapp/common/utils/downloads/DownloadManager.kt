@@ -1,6 +1,7 @@
 package com.example.composegitapp.common.utils.downloads
 
 import android.content.Context
+import com.example.composegitapp.common.preferences.IAppSettings
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.runBlocking
@@ -9,7 +10,8 @@ import java.util.Queue
 import javax.inject.Inject
 
 class DownloadManager @Inject constructor(
-    val context: Context,
+    private val context: Context,
+    private val appSettings: IAppSettings,
 ) : IDownloadManager {
 
     private val _eventFlow: MutableSharedFlow<IDownloadManager.DownloadEvents> = MutableSharedFlow()
@@ -59,7 +61,7 @@ class DownloadManager @Inject constructor(
         val task = IDownloadManager.DownloadTask(
             id = id,
             url = url,
-            fileName = fileName
+            fileName = fileName.plus("-${appSettings.getAppName()}")
                 .replace("/", "_")
                 .replace(".", "_") + ".zip"
         )

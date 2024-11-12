@@ -2,6 +2,7 @@ package com.example.composegitapp.di
 
 import android.content.Context
 import com.example.composegitapp.common.utils.downloads.DownloadService
+import com.example.composegitapp.di.feature.RepoDownloadsModule
 import com.example.composegitapp.di.feature.SearchReposModule
 import com.example.composegitapp.di.feature.SearchUsersModule
 import com.example.composegitapp.di.feature.UserRepoBranchesModule
@@ -21,6 +22,7 @@ import javax.inject.Singleton
         SearchUsersModule::class,
         UserReposModule::class,
         UserRepoBranchesModule::class,
+        RepoDownloadsModule::class,
     ],
     dependencies = [AppDeps::class]
 )

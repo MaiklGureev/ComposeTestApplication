@@ -1,11 +1,14 @@
 package com.example.composegitapp.common.preferences
 
+import android.content.Context
 import android.content.SharedPreferences
 import com.gureev.ComposeAppGitHub.BuildConfig
+import com.gureev.ComposeAppGitHub.R
 import javax.inject.Inject
 
 
 class AppSettings @Inject constructor(
+    private val context: Context,
     private val sharedPreferences: SharedPreferences
 ) : IAppSettings {
 
@@ -31,6 +34,10 @@ class AppSettings @Inject constructor(
         return BuildConfig.SERVER_URL
     }
 
+    override fun getAppName(): String {
+        return context.getString(R.string.app_name)
+    }
+
     companion object {
         private const val TOKEN =
             "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"
@@ -42,6 +49,7 @@ class AppSettings @Inject constructor(
 interface IAppSettings {
     val accessToken: String
     fun getCurrentApiUrl(): String
+    fun getAppName(): String
 
     fun saveToken(token: String)
     fun getToken(): String?

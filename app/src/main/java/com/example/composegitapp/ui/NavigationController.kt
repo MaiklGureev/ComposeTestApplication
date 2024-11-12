@@ -8,6 +8,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.composegitapp.ui.screen_downloads.RepoDownloadsScreen
+import com.example.composegitapp.ui.screen_downloads.RepoDownloadsViewModel
 import com.example.composegitapp.ui.screen_menu.MenuScreen
 import com.example.composegitapp.ui.screen_repo_branches.UserRepoBranchesScreen
 import com.example.composegitapp.ui.screen_repo_branches.UserRepoBranchesViewModel
@@ -42,6 +44,11 @@ fun NavHostCreator(viewModelFactory: ViewModelProvider.Factory) {
         composable(NavigationScreens.SearchUserScreen.name) {
             val viewModel: SearchUsersViewModel = viewModel(factory = viewModelFactory)
             SearchUsersScreen(viewModel, navController)
+        }
+
+        composable(NavigationScreens.RepoDownloadsScreen.name) {
+            val viewModel: RepoDownloadsViewModel = viewModel(factory = viewModelFactory)
+            RepoDownloadsScreen(viewModel)
         }
 
         composable(

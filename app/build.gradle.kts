@@ -12,8 +12,8 @@ android {
 
     defaultConfig {
         applicationId = "com.gureev.ComposeAppGitHub"
-        minSdk = 25
-        targetSdk = 34
+        minSdk = 23
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 

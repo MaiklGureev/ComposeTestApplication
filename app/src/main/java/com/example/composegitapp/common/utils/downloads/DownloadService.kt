@@ -10,6 +10,7 @@ import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import com.example.composegitapp.App
+import com.example.composegitapp.common.utils.media_store.MediaStoreWriterUtil
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.OkHttpClient
@@ -21,15 +22,17 @@ import javax.inject.Inject
 
 class DownloadService : Service() {
 
-
     @Inject
     lateinit var client: OkHttpClient
 
     @Inject
-    lateinit var mediaStoreUtils: MediaStoreUtils
+    lateinit var mediaStoreWriterUtil: MediaStoreWriterUtil
 
     @Inject
     lateinit var downloadManager: IDownloadManager
+
+    @Inject
+    lateinit var notificationManager: NotificationManager
 
     override fun onCreate() {
         super.onCreate()
@@ -41,12 +44,11 @@ class DownloadService : Service() {
             val channel = NotificationChannel(
                 CHANNEL_ID,
                 "Download Service",
-                NotificationManager.IMPORTANCE_LOW
+                NotificationManager.IMPORTANCE_HIGH
             ).apply {
                 description = "Channel for download notifications"
             }
 
-            val notificationManager = getSystemService(NotificationManager::class.java)
             notificationManager.createNotificationChannel(channel)
         }
     }
@@ -68,21 +70,26 @@ class DownloadService : Service() {
     override fun onBind(intent: Intent?): IBinder? = null
 
     private fun createNotification(contentText: String, progress: Int): Notification {
-        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("Downloading repository")
-            .setContentText(contentText)
-            .setSmallIcon(android.R.drawable.stat_sys_download)
-            .setProgress(100, progress, false)
-            .setOngoing(true) // Ensures the notification stays visible and persistent
-            .setPriority(NotificationCompat.PRIORITY_LOW)
+        val builder = NotificationCompat.Builder(this, CHANNEL_ID).apply {
+            setContentTitle("Downloading repository")
+            setContentText(contentText)
+            setSmallIcon(android.R.drawable.stat_sys_download)
+            if (progress != 0) {
+                setProgress(100, progress, false)
+            }
+            setOngoing(true) // Ensures the notification stays visible and persistent
+            setPriority(NotificationCompat.PRIORITY_LOW)
+        }
 
         return builder.build()
     }
 
     private fun updateNotification(progress: Int) {
-        val notification = createNotification("Downloading... $progress%", progress)
-        val notificationManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notification = if (progress == 0) {
+            createNotification("Downloading...", 0)
+        } else {
+            createNotification("Downloading... $progress%", progress)
+        }
         notificationManager.notify(NOTIFICATION_ID, notification)
     }
 
@@ -94,14 +101,12 @@ class DownloadService : Service() {
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 // Stop foreground when download fails and stop the service
-                stopForeground(STOP_FOREGROUND_DETACH)
-                stopSelf()
+                stopService()
             }
 
             override fun onResponse(call: Call, response: Response) {
                 if (!response.isSuccessful) {
-                    stopForeground(STOP_FOREGROUND_DETACH)
-                    stopSelf()
+                    stopService()
                     return
                 }
 
@@ -111,22 +116,30 @@ class DownloadService : Service() {
                         val inputStream: InputStream = body.byteStream()
 
                         // Write the file using MediaStoreUtils
-                        val fileUri = mediaStoreUtils.writeFile(fileName, inputStream)
+                        mediaStoreWriterUtil.writeFile(
+                            fileName = fileName,
+                            inputStream = inputStream,
+                            updateNotification = ::updateNotification
+                        )
 
-                        // If the file was successfully written, update the notification
-                        if (fileUri != null) {
-                            updateNotification(100)
-                        }
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
                     downloadManager.sendEventError()
                 }
 
-                stopForeground(STOP_FOREGROUND_DETACH)
-                stopSelf()
+                stopService()
             }
         })
+    }
+
+    private fun stopService() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            stopForeground(STOP_FOREGROUND_DETACH)
+        } else {
+            stopForeground(true)  // Для устройств с API <= 23
+        }
+        stopSelf()
     }
 
     companion object {

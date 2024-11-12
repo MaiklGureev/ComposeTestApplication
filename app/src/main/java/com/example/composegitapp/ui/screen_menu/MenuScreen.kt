@@ -1,6 +1,7 @@
 package com.example.composegitapp.ui.screen_menu
 
 import android.Manifest
+import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
@@ -19,7 +20,8 @@ fun MenuScreen(
     navHostController: NavHostController,
 ) {
     val onSearchClicked = { navHostController.navigate(NavigationScreens.SearchRepoScreen.name) }
-    val onDownloadsClicked = { navHostController.navigate(NavigationScreens.SearchRepoScreen.name) }
+    val onDownloadsClicked =
+        { navHostController.navigate(NavigationScreens.RepoDownloadsScreen.name) }
     val onSearchUsersClicked =
         { navHostController.navigate(NavigationScreens.SearchUserScreen.name) }
 
@@ -64,7 +66,11 @@ private fun CheckPermissions() {
 
 
     LaunchedEffect(key1 = Unit) {
-        context.requestPermission(readStoragePermission, requestPermissionLauncher)
-        context.requestPermission(writeStoragePermission, requestPermissionLauncher)
+        // Handle pre-Android 10 devices (legacy approach)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            context.requestPermission(readStoragePermission, requestPermissionLauncher)
+            context.requestPermission(writeStoragePermission, requestPermissionLauncher)
+        }
+
     }
 }

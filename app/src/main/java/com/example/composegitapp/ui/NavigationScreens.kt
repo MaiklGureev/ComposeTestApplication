@@ -27,4 +27,5 @@ sealed class NavigationScreens(val name: String) {
         const val keyUser = "UserName"
     }
 
+    data object RepoDownloadsScreen : NavigationScreens("RepoDownloadsScreen")
 }

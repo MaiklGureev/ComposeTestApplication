@@ -20,9 +20,9 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         WindowCompat.setDecorFitsSystemWindows(window, false)
         (application as App).appComponent.inject(this)
-
 //        val viewModelProvider = ViewModelProvider(viewModelStore, viewModelFactory)
 
         setContent {
