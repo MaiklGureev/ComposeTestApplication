@@ -14,7 +14,17 @@ sealed class NavigationScreens(val name: String) {
         fun toRoute(nickName: String): String {
             return "UserReposWithNickName/$nickName"
         }
+
         const val key = "NickName"
+    }
+
+    data object RepoBranches : NavigationScreens("RepoBranches/{RepoName}/{UserName}") {
+        fun toRoute(repoName: String, userName: String): String {
+            return "RepoBranches/$repoName/$userName"
+        }
+
+        const val keyRepo = "RepoName"
+        const val keyUser = "UserName"
     }
 
 }

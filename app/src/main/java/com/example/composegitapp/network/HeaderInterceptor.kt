@@ -1,6 +1,6 @@
 package com.example.composegitapp.network
 
-import com.example.composegitapp.preferences.IAppSettings
+import com.example.composegitapp.common.preferences.IAppSettings
 import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject

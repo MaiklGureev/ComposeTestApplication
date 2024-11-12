@@ -1,9 +1,9 @@
 package com.example.composegitapp.di
 
 import android.annotation.SuppressLint
+import com.example.composegitapp.common.preferences.IAppSettings
 import com.example.composegitapp.network.HeaderInterceptor
 import com.example.composegitapp.network.IGitHubApi
-import com.example.composegitapp.preferences.IAppSettings
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
@@ -16,7 +16,6 @@ import java.security.SecureRandom
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
 import java.util.concurrent.TimeUnit
-import javax.inject.Singleton
 import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
@@ -29,7 +28,10 @@ class NetworkModule {
         createWebServiceApi(okHttpClient, appSettings)
 
     @Provides
-    fun createOkHttpClient(logInterceptor: HttpLoggingInterceptor,headerInterceptor: HeaderInterceptor): OkHttpClient {
+    fun createOkHttpClient(
+        logInterceptor: HttpLoggingInterceptor,
+        headerInterceptor: HeaderInterceptor
+    ): OkHttpClient {
         val httpClient = getUnsafeOkHttpClient().apply {
             addInterceptor(logInterceptor)
             addInterceptor(headerInterceptor)
@@ -85,6 +87,8 @@ class NetworkModule {
                 val sslContext = SSLContext.getInstance("SSL").apply {
                     init(null, trustAllCerts, SecureRandom())
                 }
+                followRedirects(true)
+                followSslRedirects(true)
                 sslSocketFactory(sslContext.socketFactory, trustAllCerts[0] as X509TrustManager)
                 hostnameVerifier { _, _ -> true }
             }

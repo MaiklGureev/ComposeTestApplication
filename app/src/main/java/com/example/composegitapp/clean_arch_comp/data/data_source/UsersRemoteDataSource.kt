@@ -18,7 +18,7 @@ class UsersRemoteDataSource @Inject constructor(
 
         val result = api.searchUsers(
             query = query,
-            sort =sort,
+            sort = sort,
             order = order,
             perPage = perPage,
             page = page

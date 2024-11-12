@@ -4,7 +4,7 @@ import com.example.composegitapp.clean_arch_comp.data.dto.RepoDto
 import com.example.composegitapp.clean_arch_comp.domain.models.RepoItemDomain
 import javax.inject.Inject
 
-class RepoItemMapper@Inject constructor(): IRepoItemMapper {
+class RepoItemMapper @Inject constructor() : IRepoItemMapper {
     override fun map(item: RepoDto.RepoItemDto): RepoItemDomain {
         return RepoItemDomain(
             name = item.name.orEmpty(),
@@ -17,6 +17,6 @@ class RepoItemMapper@Inject constructor(): IRepoItemMapper {
     }
 }
 
-interface IRepoItemMapper{
+interface IRepoItemMapper {
     fun map(item: RepoDto.RepoItemDto): RepoItemDomain
 }

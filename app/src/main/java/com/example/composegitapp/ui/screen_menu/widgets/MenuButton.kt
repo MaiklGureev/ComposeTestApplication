@@ -21,6 +21,7 @@ fun MenuButton(onClick: () -> Unit, text: String) {
         )
     }
 }
+
 @Preview
 @Composable
 fun PreviewMenuButton(): Unit {

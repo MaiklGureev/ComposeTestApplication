@@ -1,4 +1,4 @@
-package com.example.composegitapp.preferences
+package com.example.composegitapp.common.preferences
 
 import android.content.SharedPreferences
 import com.gureev.ComposeAppGitHub.BuildConfig
@@ -35,7 +35,7 @@ class AppSettings @Inject constructor(
         private const val TOKEN =
             "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"
 
-        private const val TOKEN_KEY= "TOKEN_KEY"
+        private const val TOKEN_KEY = "TOKEN_KEY"
     }
 }
 

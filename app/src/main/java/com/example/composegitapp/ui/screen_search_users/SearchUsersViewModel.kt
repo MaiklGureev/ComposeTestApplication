@@ -8,7 +8,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
 import com.example.composegitapp.clean_arch_comp.domain.models.UserItemDomain
-import com.example.composegitapp.network.ResponseParams
+import com.example.composegitapp.network.NetworkParams
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
@@ -45,7 +45,7 @@ class SearchUsersViewModel @Inject constructor(
 
     fun onQueryChange(newQuery: String) {
         _query.value = newQuery
-        if (newQuery.isNotBlank() && newQuery.length >= ResponseParams.MIN_QUERY_LENGTH) {
+        if (newQuery.isNotBlank() && newQuery.length >= NetworkParams.MIN_QUERY_LENGTH) {
             _pagingQuery.value = _query.value
         }
     }
@@ -69,7 +69,7 @@ class SearchUsersViewModel @Inject constructor(
 
     private fun createNewPagingData(query: String): Flow<PagingData<UserUiModel>> {
         return Pager(
-            PagingConfig(pageSize = ResponseParams.PER_PAGE_DEFAULT_VALUE)
+            PagingConfig(pageSize = NetworkParams.PER_PAGE_DEFAULT_VALUE)
         ) {
             usersPagingSource.get().apply {
                 updateQueryAndResetPage(query)
@@ -78,12 +78,12 @@ class SearchUsersViewModel @Inject constructor(
     }
 
     data class UserUiModel(
-        val id:Int,
-        val name:String,
-        val url:String
+        val id: Int,
+        val name: String,
+        val url: String
     )
 
-    private fun UserItemDomain.convertToUI():UserUiModel {
+    private fun UserItemDomain.convertToUI(): UserUiModel {
         return UserUiModel(id = id, name = name, url = url)
     }
 

@@ -8,5 +8,5 @@ import javax.inject.Inject
 
 
 class UsersPagingSource @Inject constructor(
-     useCase:ISearchUsersUseCase
+    useCase: ISearchUsersUseCase
 ) : AbstractPagingSource<ISearchUsersUseCase, UserItemDomain>(useCase)

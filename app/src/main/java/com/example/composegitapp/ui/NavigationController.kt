@@ -9,13 +9,15 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.composegitapp.ui.screen_menu.MenuScreen
+import com.example.composegitapp.ui.screen_repo_branches.UserRepoBranchesScreen
+import com.example.composegitapp.ui.screen_repo_branches.UserRepoBranchesViewModel
 import com.example.composegitapp.ui.screen_search_repos.SearchRepoScreen
 import com.example.composegitapp.ui.screen_search_repos.SearchRepoViewModel
 import com.example.composegitapp.ui.screen_search_users.SearchUsersScreen
 import com.example.composegitapp.ui.screen_search_users.SearchUsersViewModel
 import com.example.composegitapp.ui.screen_splash.SplashScreen
 import com.example.composegitapp.ui.screen_user_repos.SearchUserReposScreen
-import com.example.composegitapp.ui.screen_user_repos.SearchUserReposViewModel
+import com.example.composegitapp.ui.screen_user_repos.UserReposViewModel
 
 @Composable
 fun NavHostCreator(viewModelFactory: ViewModelProvider.Factory) {
@@ -44,31 +46,41 @@ fun NavHostCreator(viewModelFactory: ViewModelProvider.Factory) {
 
         composable(
             route = NavigationScreens.UserReposWithNickName.name,
-            arguments = listOf(navArgument(NavigationScreens.UserReposWithNickName.key) { type = NavType.StringType})
+            arguments = listOf(navArgument(NavigationScreens.UserReposWithNickName.key) {
+                type = NavType.StringType
+            })
         ) { backStackEntry ->
-            val userName: String =backStackEntry.arguments?.getString(
+            val userName: String = backStackEntry.arguments?.getString(
                 NavigationScreens.UserReposWithNickName.key
             ).orEmpty()
 
-            val viewModel: SearchUserReposViewModel = viewModel(factory = viewModelFactory)
-            SearchUserReposScreen(userName,viewModel, navController)
+            val viewModel: UserReposViewModel = viewModel(factory = viewModelFactory)
+            SearchUserReposScreen(userName, viewModel, navController)
         }
 
-//        composable("heroesList") {
-//            HeroesListScreen(navHostController = navController, onToggleTheme = onToggleTheme)
-//        }
-//
-//        composable(
-//            "hero/{heroId}",
-//            arguments = listOf(navArgument("heroId") { type = NavType.LongType })
-//        ) { backStackEntry ->
-//            backStackEntry.arguments?.getLong("heroId")?.let { id ->
-//                HeroDetailScreen(
-//                    navHostController = navController,
-//                    heroId = id
-//                )
-//            }
-//        }
+        composable(
+            route = NavigationScreens.RepoBranches.name,
+            arguments = listOf(
+                navArgument(NavigationScreens.RepoBranches.keyRepo) {
+                    type = NavType.StringType
+                },
+                navArgument(NavigationScreens.RepoBranches.keyUser) {
+                    type = NavType.StringType
+                })
+        ) { backStackEntry ->
+
+            val userName: String = backStackEntry.arguments?.getString(
+                NavigationScreens.RepoBranches.keyUser
+            ).orEmpty()
+
+
+            val repoName: String = backStackEntry.arguments?.getString(
+                NavigationScreens.RepoBranches.keyRepo
+            ).orEmpty()
+
+            val viewModel: UserRepoBranchesViewModel = viewModel(factory = viewModelFactory)
+            UserRepoBranchesScreen(userName = userName, repoName = repoName, viewModel = viewModel)
+        }
     }
 }
 

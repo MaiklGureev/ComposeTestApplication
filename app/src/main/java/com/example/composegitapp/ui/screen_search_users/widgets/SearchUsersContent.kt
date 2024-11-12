@@ -16,7 +16,6 @@ import androidx.navigation.NavHostController
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.example.composegitapp.clean_arch_comp.domain.models.UserItemDomain
 import com.example.composegitapp.ui.NavigationScreens
 import com.example.composegitapp.ui.design_system.ErrorItem
 import com.example.composegitapp.ui.design_system.LoadingView
@@ -43,7 +42,7 @@ fun SearchUsersContent(
         LazyColumn(
             modifier = modifier
                 .padding(innerPadding),
-            ) {
+        ) {
 
             items(userItems.itemCount) { userId ->
                 val item = userItems[userId] ?: return@items

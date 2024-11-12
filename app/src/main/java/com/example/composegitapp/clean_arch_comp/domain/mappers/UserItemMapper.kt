@@ -4,7 +4,7 @@ import com.example.composegitapp.clean_arch_comp.data.dto.UserDto
 import com.example.composegitapp.clean_arch_comp.domain.models.UserItemDomain
 import javax.inject.Inject
 
-class UserItemMapper @Inject constructor(): IUserItemMapper {
+class UserItemMapper @Inject constructor() : IUserItemMapper {
     override fun map(item: UserDto.UserDtoItem): UserItemDomain {
         return UserItemDomain(
             id = item.id ?: item.login.hashCode(),
@@ -14,6 +14,6 @@ class UserItemMapper @Inject constructor(): IUserItemMapper {
     }
 }
 
-interface IUserItemMapper{
+interface IUserItemMapper {
     fun map(item: UserDto.UserDtoItem): UserItemDomain
 }

@@ -15,7 +15,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.composegitapp.common.extension.ContextExt
 import com.example.composegitapp.common.extension.ContextExt.hideKeyboard
 import com.gureev.ComposeAppGitHub.R
 
@@ -60,5 +59,11 @@ fun SearchTextField(
 @Preview
 @Composable
 private fun PreviewSearchTextField() {
-    SearchTextField(label = "Search", query = "", onQueryChange = { _ -> }, onSearch = { -> }, modifier = Modifier)
+    SearchTextField(
+        label = "Search",
+        query = "",
+        onQueryChange = { _ -> },
+        onSearch = { -> },
+        modifier = Modifier
+    )
 }

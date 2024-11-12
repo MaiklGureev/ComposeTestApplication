@@ -5,32 +5,27 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.composegitapp.clean_arch_comp.domain.models.UserRepoItemDomain
-import com.example.composegitapp.clean_arch_comp.domain.use_case.ISearchUserReposUseCase
+import com.example.composegitapp.clean_arch_comp.domain.use_case.IGetUserReposUseCase
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class SearchUserReposViewModel @Inject constructor(
-    private val searchUserReposUseCase: ISearchUserReposUseCase
+class UserReposViewModel @Inject constructor(
+    private val searchUserReposUseCase: IGetUserReposUseCase
 ) : ViewModel() {
 
-    // Single state object to hold repo list, loading state, and error message
     private val _uiState = mutableStateOf(SearchUserUiModel())
     val uiState: State<SearchUserUiModel> = _uiState
 
     fun searchRepos(userName: String) {
-        // Update state to reflect loading
         _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
-
         viewModelScope.launch {
             try {
                 val repos = searchUserReposUseCase.loadData(userName)
-                // Update the UI state with the loaded repos
                 _uiState.value = _uiState.value.copy(
                     repoList = repos.map { it.mapToUi() },
                     isLoading = false
                 )
             } catch (e: Exception) {
-                // Handle error and update UI state
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
                     errorMessage = "Failed to load repositories: ${e.localizedMessage}"

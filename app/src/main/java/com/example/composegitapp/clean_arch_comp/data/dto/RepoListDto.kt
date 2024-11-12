@@ -3,7 +3,7 @@ package com.example.composegitapp.clean_arch_comp.data.dto
 
 import com.google.gson.annotations.SerializedName
 
-class RepoListDto : ArrayList<RepoListDto.RepoListDtoItem>(){
+class RepoListDto : ArrayList<RepoListDto.RepoListDtoItem>() {
     data class RepoListDtoItem(
         @SerializedName("allow_forking") val allowForking: Boolean? = null,
         @SerializedName("archive_url") val archiveUrl: String? = null,
@@ -92,7 +92,7 @@ class RepoListDto : ArrayList<RepoListDto.RepoListDtoItem>(){
             @SerializedName("spdx_id") val spdxId: String? = null,
             @SerializedName("url") val url: String? = null
         )
-    
+
         data class Owner(
             @SerializedName("avatar_url") val avatarUrl: String? = null,
             @SerializedName("events_url") val eventsUrl: String? = null,

@@ -38,9 +38,9 @@ interface IGitHubApi {
     @GET("/search/repositories")
     suspend fun searchRepository(
         @Query("q") query: String,
-        @Query("sort") sort: String = ResponseParams.Sort.UPDATED,
-        @Query("order") order: String = ResponseParams.Order.DESC,
-        @Query("per_page") perPage: Int = ResponseParams.PER_PAGE_DEFAULT_VALUE,
+        @Query("sort") sort: String = NetworkParams.Sort.UPDATED,
+        @Query("order") order: String = NetworkParams.Order.DESC,
+        @Query("per_page") perPage: Int = NetworkParams.PER_PAGE_DEFAULT_VALUE,
         @Query("page") page: Int = 1,
     ): Response<RepoDto>
 
@@ -70,23 +70,11 @@ interface IGitHubApi {
     @GET("/search/users")
     suspend fun searchUsers(
         @Query("q") query: String,
-        @Query("sort") sort: String = ResponseParams.Sort.UPDATED,
-        @Query("order") order: String = ResponseParams.Order.DESC,
-        @Query("per_page") perPage: Int = ResponseParams.PER_PAGE_DEFAULT_VALUE,
+        @Query("sort") sort: String = NetworkParams.Sort.UPDATED,
+        @Query("order") order: String = NetworkParams.Order.DESC,
+        @Query("per_page") perPage: Int = NetworkParams.PER_PAGE_DEFAULT_VALUE,
         @Query("page") page: Int = 1,
     ): Response<UserDto>
-
-    /**
-     * Find user branches in repo.
-     * @param userName user name
-     * @param repoName user repo
-     */
-    //https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28#download-a-repository-archive-zip
-    @GET("/repos/{userName}/{repoName}/branches")
-    suspend fun getUserBranches(
-        @Path("userName") userName: String,
-        @Path("repoName") repoName: String,
-    ): Response<RepoBranchesDto>
 
     /**
      * Find user repos.
@@ -96,4 +84,17 @@ interface IGitHubApi {
     suspend fun getUserRepos(
         @Path("userName") userName: String,
     ): Response<RepoListDto>
+
+    /**
+     * Find user branches in repo.
+     * @param userName user name
+     * @param repoName user repo
+     */
+    //https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28#download-a-repository-archive-zip
+    @GET("/repos/{userName}/{repoName}/branches")
+    suspend fun getUserRepoBranches(
+        @Path("userName") userName: String,
+        @Path("repoName") repoName: String,
+    ): Response<RepoBranchesDto>
+
 }

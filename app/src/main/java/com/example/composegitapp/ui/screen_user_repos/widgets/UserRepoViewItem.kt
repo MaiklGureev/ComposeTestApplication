@@ -1,4 +1,4 @@
-package com.example.composegitapp.ui.screen_search_repos.widgets
+package com.example.composegitapp.ui.screen_user_repos.widgets
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -16,12 +16,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.composegitapp.ui.design_system.DataTextView
 import com.example.composegitapp.ui.design_system.IconButtonLink
-import com.example.composegitapp.ui.screen_search_repos.SearchRepoViewModel
+import com.example.composegitapp.ui.screen_user_repos.UserReposViewModel.SearchUserUiModel
 import com.gureev.ComposeAppGitHub.R
 
 @Composable
-fun RepoViewItem(
-    dataViewModel: SearchRepoViewModel.RepoUiModel,
+fun UserRepoViewItem(
+    dataViewModel: SearchUserUiModel.UserRepoUiModel,
     onCardClick: () -> Unit = {}
 ) {
     Card(
@@ -45,11 +45,6 @@ fun RepoViewItem(
                     .weight(1f)
             ) {
                 DataTextView(
-                    key = stringResource(id = R.string.user_login),
-                    value = dataViewModel.author,
-                    modifier = Modifier.wrapContentHeight()
-                )
-                DataTextView(
                     key = stringResource(id = R.string.repo_name),
                     value = dataViewModel.name,
                     modifier = Modifier.wrapContentHeight()
@@ -62,7 +57,7 @@ fun RepoViewItem(
             }
 
             IconButtonLink(
-                url = dataViewModel.htmlUrl
+                url = dataViewModel.url
             )
         }
     }
@@ -72,9 +67,14 @@ fun RepoViewItem(
 @Composable
 @Preview
 private fun PreviewUserViewItem() {
-    RepoViewItem(
-        dataViewModel = SearchRepoViewModel.RepoUiModel(
-            name = "Arika", author = "Cordell", htmlUrl = "Shaunda", description = "Karlee"
+    UserRepoViewItem(
+        dataViewModel = SearchUserUiModel.UserRepoUiModel(
+            id = 2742,
+            author = "Ashlye",
+            name = "Tashonda",
+            description = "Loreal",
+            fullName = "Coree",
+            url = "Hamilton"
         ),
         onCardClick = { -> }
     )

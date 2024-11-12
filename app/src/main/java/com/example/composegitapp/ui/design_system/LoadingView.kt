@@ -24,6 +24,6 @@ fun LoadingView(
 
 @Composable
 @Preview
-private fun PreviewLoadingView(){
+private fun PreviewLoadingView() {
     LoadingView(modifier = Modifier.fillMaxWidth())
 }

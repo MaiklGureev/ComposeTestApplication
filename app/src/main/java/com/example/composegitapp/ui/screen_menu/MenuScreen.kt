@@ -26,7 +26,8 @@ fun MenuScreen(
 ) {
     val onSearchClicked = { navHostController.navigate(NavigationScreens.SearchRepoScreen.name) }
     val onDownloadsClicked = { navHostController.navigate(NavigationScreens.SearchRepoScreen.name) }
-    val onSearchUsersClicked = { navHostController.navigate(NavigationScreens.SearchUserScreen.name) }
+    val onSearchUsersClicked =
+        { navHostController.navigate(NavigationScreens.SearchUserScreen.name) }
     MenuContent(
         onSearchReposClicked = onSearchClicked,
         onSearchUsersClicked = onSearchUsersClicked,
@@ -52,16 +53,21 @@ fun MenuContent(
                 .wrapContentHeight()
                 .padding(horizontal = 20.dp)
         ) {
-            MenuButton(onClick = onSearchReposClicked, text = stringResource(id = R.string.search_repos))
+            MenuButton(
+                onClick = onSearchReposClicked,
+                text = stringResource(id = R.string.search_repos)
+            )
             Spacer(modifier = Modifier.height(20.dp))
-            MenuButton(onClick = onSearchUsersClicked, text = stringResource(id = R.string.search_users))
+            MenuButton(
+                onClick = onSearchUsersClicked,
+                text = stringResource(id = R.string.search_users)
+            )
             Spacer(modifier = Modifier.height(20.dp))
             MenuButton(onClick = onDownloadsClicked, text = stringResource(id = R.string.downloads))
         }
     }
 
 }
-
 
 
 @Preview

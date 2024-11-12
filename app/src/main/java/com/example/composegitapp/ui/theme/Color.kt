@@ -1,5 +1,3 @@
-
-
 package com.example.composegitapp.ui.theme
 
 import androidx.compose.ui.graphics.Color

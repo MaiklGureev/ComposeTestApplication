@@ -3,7 +3,7 @@ package com.example.composegitapp.clean_arch_comp.data.dto
 
 import com.google.gson.annotations.SerializedName
 
-class RepoBranchesDto : ArrayList<RepoBranchesDto.RepoBranchesDtoItem>(){
+class RepoBranchesDto : ArrayList<RepoBranchesDto.RepoBranchesDtoItem>() {
     data class RepoBranchesDtoItem(
         @SerializedName("name") val name: String? = null,
         @SerializedName("commit") val commit: Commit? = null,

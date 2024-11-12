@@ -5,11 +5,11 @@ import com.example.composegitapp.clean_arch_comp.data.data_source.IUsersRemoteDa
 import com.example.composegitapp.clean_arch_comp.data.data_source.UsersRemoteDataSource
 import com.example.composegitapp.clean_arch_comp.data.repository.IUsersRepository
 import com.example.composegitapp.clean_arch_comp.data.repository.UsersRepository
-import com.example.composegitapp.di.view_model.ViewModelKey
 import com.example.composegitapp.clean_arch_comp.domain.mappers.IUserItemMapper
 import com.example.composegitapp.clean_arch_comp.domain.mappers.UserItemMapper
 import com.example.composegitapp.clean_arch_comp.domain.use_case.ISearchUsersUseCase
 import com.example.composegitapp.clean_arch_comp.domain.use_case.SearchUsersUseCase
+import com.example.composegitapp.di.view_model.ViewModelKey
 import com.example.composegitapp.ui.screen_search_users.SearchUsersViewModel
 import dagger.Binds
 import dagger.Module
@@ -34,5 +34,5 @@ interface SearchUsersModule {
 
     @Binds
     fun bindSearchUsersUseCase(bind: SearchUsersUseCase): ISearchUsersUseCase
-    
+
 }

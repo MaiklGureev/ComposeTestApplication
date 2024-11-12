@@ -1,11 +1,8 @@
 package com.example.composegitapp.clean_arch_comp.domain.use_case
 
 import com.example.composegitapp.clean_arch_comp.data.repository.IReposRepository
-import com.example.composegitapp.clean_arch_comp.data.repository.IUsersRepository
 import com.example.composegitapp.clean_arch_comp.domain.mappers.IRepoItemMapper
-import com.example.composegitapp.clean_arch_comp.domain.mappers.IUserItemMapper
 import com.example.composegitapp.clean_arch_comp.domain.models.RepoItemDomain
-import com.example.composegitapp.clean_arch_comp.domain.models.UserItemDomain
 import com.example.composegitapp.common.base.IPagingSourceUseCase
 import javax.inject.Inject
 

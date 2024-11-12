@@ -1,4 +1,3 @@
-
 package com.example.composegitapp.ui.theme
 
 import androidx.compose.material3.Typography

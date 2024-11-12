@@ -66,11 +66,11 @@ class RepoRemoteDataSource @Inject constructor(
         }
     }
 
-    override suspend fun getUserBranches(
+    override suspend fun getUserRepoBranches(
         userName: String,
         repoName: String
     ): List<RepoBranchesDto.RepoBranchesDtoItem> {
-        val result = api.getUserBranches(userName, repoName)
+        val result = api.getUserRepoBranches(userName = userName, repoName = repoName)
         return when (result.code()) {
             200 -> {
                 result.body().orEmpty()
@@ -96,7 +96,7 @@ interface IRepoRemoteDataSource {
 
     suspend fun getUserRepos(userName: String): List<RepoListDto.RepoListDtoItem>
 
-    suspend fun getUserBranches(
+    suspend fun getUserRepoBranches(
         userName: String,
         repoName: String
     ): List<RepoBranchesDto.RepoBranchesDtoItem>

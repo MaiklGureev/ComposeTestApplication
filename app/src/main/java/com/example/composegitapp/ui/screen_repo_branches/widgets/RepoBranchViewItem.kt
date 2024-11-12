@@ -1,4 +1,4 @@
-package com.example.composegitapp.ui.screen_user_repos.widgets
+package com.example.composegitapp.ui.screen_repo_branches.widgets
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -15,14 +15,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.composegitapp.ui.design_system.DataTextView
-import com.example.composegitapp.ui.screen_search_users.widgets.IconButtonLink
-import com.example.composegitapp.ui.screen_user_repos.SearchUserReposViewModel.SearchUserUiModel
+import com.example.composegitapp.ui.design_system.IconButtonDownload
+import com.example.composegitapp.ui.screen_repo_branches.UserRepoBranchesViewModel
 import com.gureev.ComposeAppGitHub.R
 
+
 @Composable
-fun UserRepoItem(
-    dataViewModel: SearchUserUiModel.UserRepoUiModel,
-    onCardClick: () -> Unit = {}
+fun RepoBranchViewItem(
+    dataViewModel: UserRepoBranchesViewModel.UserRepoBranchesUiModel.RepoBranchViewModel,
+    onCardClick: () -> Unit = {},
+    onDownloadClick: () -> Unit = {}
 ) {
     Card(
         shape = RoundedCornerShape(8.dp),
@@ -45,20 +47,16 @@ fun UserRepoItem(
                     .weight(1f)
             ) {
                 DataTextView(
-                    key = stringResource(id = R.string.repo_name),
+                    key = stringResource(id = R.string.branch_name),
                     value = dataViewModel.name,
-                    modifier = Modifier.wrapContentHeight()
-                )
-                DataTextView(
-                    key = stringResource(id = R.string.repo_description),
-                    value = dataViewModel.description.ifBlank { stringResource(id = R.string.empty) },
                     modifier = Modifier.wrapContentHeight()
                 )
             }
 
             // Icon button to open URL
-            IconButtonLink(
-                url = dataViewModel.url
+            IconButtonDownload(
+                status = dataViewModel.downloadStatus,
+                onClick = onDownloadClick
             )
         }
     }
@@ -67,16 +65,14 @@ fun UserRepoItem(
 
 @Composable
 @Preview
-private fun PreviewUserViewItem() {
-    UserRepoItem(
-        dataViewModel = SearchUserUiModel.UserRepoUiModel(
+private fun PreviewRepoBranchViewItem() {
+    RepoBranchViewItem(
+        dataViewModel = UserRepoBranchesViewModel.UserRepoBranchesUiModel.RepoBranchViewModel(
             id = 2742,
-            author = "Ashlye",
             name = "Tashonda",
-            description = "Loreal",
-            fullName = "Coree",
             url = "Hamilton"
         ),
-        onCardClick = { -> }
+        onCardClick = { -> },
+        onDownloadClick = { -> }
     )
 }

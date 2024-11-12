@@ -1,5 +1,7 @@
 package com.example.composegitapp.ui.design_system
 
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.SpanStyle
@@ -8,8 +10,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.ui.tooling.preview.Preview
 
 
@@ -20,9 +20,12 @@ fun DataTextView(
     modifier: Modifier = Modifier
 ) {
     val annotatedString = buildAnnotatedString {
-        withStyle(style = SpanStyle(
-            fontWeight = FontWeight.Bold,
-            fontStyle = MaterialTheme.typography.titleMedium.fontStyle)) {
+        withStyle(
+            style = SpanStyle(
+                fontWeight = FontWeight.Bold,
+                fontStyle = MaterialTheme.typography.titleMedium.fontStyle
+            )
+        ) {
             append(key)
         }
         withStyle(style = SpanStyle(fontStyle = MaterialTheme.typography.bodyMedium.fontStyle)) {
@@ -37,6 +40,7 @@ fun DataTextView(
         textAlign = TextAlign.Start,
     )
 }
+
 @Preview
 @Composable
 private fun PreviewTextDataView(): Unit {

@@ -8,7 +8,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
 import com.example.composegitapp.clean_arch_comp.domain.models.RepoItemDomain
-import com.example.composegitapp.network.ResponseParams
+import com.example.composegitapp.network.NetworkParams
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
@@ -44,7 +44,7 @@ class SearchRepoViewModel @Inject constructor(
 
     fun onQueryChange(newQuery: String) {
         _query.value = newQuery
-        if (newQuery.isNotBlank() && newQuery.length >= ResponseParams.MIN_QUERY_LENGTH) {
+        if (newQuery.isNotBlank() && newQuery.length >= NetworkParams.MIN_QUERY_LENGTH) {
             _pagingQuery.value = _query.value
         }
     }
@@ -68,7 +68,7 @@ class SearchRepoViewModel @Inject constructor(
 
     private fun createNewPagingData(query: String): Flow<PagingData<RepoUiModel>> {
         return Pager(
-            PagingConfig(pageSize = ResponseParams.PER_PAGE_DEFAULT_VALUE)
+            PagingConfig(pageSize = NetworkParams.PER_PAGE_DEFAULT_VALUE)
         ) {
             repoPagingSource.get().apply {
                 updateQueryAndResetPage(query)
@@ -84,7 +84,12 @@ class SearchRepoViewModel @Inject constructor(
     )
 
     private fun RepoItemDomain.convertToUI(): RepoUiModel {
-        return RepoUiModel(name = name, author = author,description = description, htmlUrl = htmlUrl)
+        return RepoUiModel(
+            name = name,
+            author = author,
+            description = description,
+            htmlUrl = htmlUrl
+        )
     }
 
 

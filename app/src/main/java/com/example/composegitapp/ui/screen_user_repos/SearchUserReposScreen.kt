@@ -10,7 +10,7 @@ import com.example.composegitapp.ui.screen_user_repos.widgets.SearchUserReposCon
 @Composable
 fun SearchUserReposScreen(
     userName: String,
-    viewModel: SearchUserReposViewModel,
+    viewModel: UserReposViewModel,
     navHostController: NavHostController,
 ) {
     Scaffold(

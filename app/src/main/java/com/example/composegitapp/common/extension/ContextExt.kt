@@ -4,12 +4,13 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.provider.Settings
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 
 object ContextExt {
 
-    fun  Context.hideKeyboard() {
+    fun Context.hideKeyboard() {
         val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow((this as? Activity)?.currentFocus?.windowToken, 0)
     }
@@ -40,4 +41,14 @@ object ContextExt {
             e.printStackTrace()
         }
     }
+}
+
+fun Context.showLongToast(text: String) = Toast.makeText(this, text, Toast.LENGTH_LONG).show()
+
+fun Context.openAppPermissionSettings() {
+    this.showLongToast("Failed to save file. Check recording permission and upload again.")
+    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+        data = Uri.parse("package:${this@openAppPermissionSettings.packageName}")
+    }
+    this.startActivity(intent)
 }
