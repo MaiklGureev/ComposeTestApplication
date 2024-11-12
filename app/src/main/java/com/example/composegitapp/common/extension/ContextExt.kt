@@ -3,10 +3,13 @@ package com.example.composegitapp.common.extension
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.core.content.ContextCompat
 
 object ContextExt {
 
@@ -51,4 +54,14 @@ fun Context.openAppPermissionSettings() {
         data = Uri.parse("package:${this@openAppPermissionSettings.packageName}")
     }
     this.startActivity(intent)
+}
+
+fun Context.requestPermission(permission: String, launcher: ActivityResultLauncher<String>) {
+    if (!hasPermission(permission)) {
+        launcher.launch(permission)
+    }
+}
+
+fun Context.hasPermission(permission: String): Boolean {
+    return ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
 }

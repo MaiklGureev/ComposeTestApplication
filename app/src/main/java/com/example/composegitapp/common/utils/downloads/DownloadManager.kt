@@ -56,7 +56,13 @@ class DownloadManager @Inject constructor(
         url: String,
         fileName: String
     ) {
-        val task = IDownloadManager.DownloadTask(id = id, url = url, fileName = fileName)
+        val task = IDownloadManager.DownloadTask(
+            id = id,
+            url = url,
+            fileName = fileName
+                .replace("/", "_")
+                .replace(".", "_") + ".zip"
+        )
         downloadQueue.offer(task)
 
         // Если загрузка не активна, начинаем обработку очереди

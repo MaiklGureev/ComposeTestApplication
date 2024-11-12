@@ -46,7 +46,16 @@ class RepoRemoteDataSourceTest {
 
     @Test
     fun searchRepositoriesReturnsItemsOnSuccessfulResponse() = runTest {
-        val mockResponse = Response.success(RepoDto(items = listOf(RepoDto.RepoItemDto(id = 1, name = "TestRepo"))))
+        val mockResponse = Response.success(
+            RepoDto(
+                items = listOf(
+                    RepoDto.RepoItemDto(
+                        id = 1,
+                        name = "TestRepo"
+                    )
+                )
+            )
+        )
         Mockito.`when`(mockApi.searchRepository("test")).thenReturn(mockResponse)
 
         val result = dataSource.searchRepositories(
@@ -80,30 +89,31 @@ class RepoRemoteDataSourceTest {
     }
 
     @Test
-    fun searchRepositoriesThrowsServiceUnavailableExceptionOnServiceUnavailableResponse() = runTest {
-        val mockResponse = Response.error<RepoDto>(503, "".toResponseBody(null))
-        Mockito.`when`(
-            mockApi.searchRepository(
-                query = "test",
-                page = 1,
-                sort = NetworkParams.Sort.UPDATED,
-                order = NetworkParams.Order.DESC,
-                perPage = NetworkParams.PER_PAGE_DEFAULT_VALUE
-            )
-        ).thenReturn(mockResponse)
+    fun searchRepositoriesThrowsServiceUnavailableExceptionOnServiceUnavailableResponse() =
+        runTest {
+            val mockResponse = Response.error<RepoDto>(503, "".toResponseBody(null))
+            Mockito.`when`(
+                mockApi.searchRepository(
+                    query = "test",
+                    page = 1,
+                    sort = NetworkParams.Sort.UPDATED,
+                    order = NetworkParams.Order.DESC,
+                    perPage = NetworkParams.PER_PAGE_DEFAULT_VALUE
+                )
+            ).thenReturn(mockResponse)
 
-        val exception = assertFailsWith<IllegalStateException> {
-            dataSource.searchRepositories(
-                query = "test",
-                page = 1,
-                sort = NetworkParams.Sort.UPDATED,
-                order = NetworkParams.Order.DESC,
-                perPage = NetworkParams.PER_PAGE_DEFAULT_VALUE
-            )
+            val exception = assertFailsWith<IllegalStateException> {
+                dataSource.searchRepositories(
+                    query = "test",
+                    page = 1,
+                    sort = NetworkParams.Sort.UPDATED,
+                    order = NetworkParams.Order.DESC,
+                    perPage = NetworkParams.PER_PAGE_DEFAULT_VALUE
+                )
+            }
+
+            assertEquals("Service is unavailable. Please try again later.", exception.message)
         }
-
-        assertEquals("Service is unavailable. Please try again later.", exception.message)
-    }
 
     @Test
     fun searchRepositoriesReturnsEmptyListOnFailedResponse() = runTest {

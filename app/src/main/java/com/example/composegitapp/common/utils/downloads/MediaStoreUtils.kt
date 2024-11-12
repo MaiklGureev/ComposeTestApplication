@@ -98,7 +98,7 @@ class MediaStoreUtils @Inject constructor(
         // Define the file path for legacy Android versions
         val downloadDir =
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-        val file = File(downloadDir, fileName.replace("/", "_").replace(".", "_") + ".zip")
+        val file = File(downloadDir, fileName)
 
         try {
             // Create file if it doesn't exist
