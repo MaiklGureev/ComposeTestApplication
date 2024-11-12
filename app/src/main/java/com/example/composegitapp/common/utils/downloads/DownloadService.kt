@@ -58,7 +58,7 @@ class DownloadService : Service() {
         val fileName = intent.getStringExtra(FILE_NAME) ?: return START_NOT_STICKY
 
         // Start the service in the foreground with a valid notification
-        startForeground(NOTIFICATION_ID, createNotification("Starting download...", 0))
+        startForeground(NOTIFICATION_ID, createNotification("Starting download..."))
 
         // Download the file and save it using MediaStoreUtils
         downloadRepositoryZip(url, fileName)
@@ -69,27 +69,30 @@ class DownloadService : Service() {
 
     override fun onBind(intent: Intent?): IBinder? = null
 
-    private fun createNotification(contentText: String, progress: Int): Notification {
+    private fun createNotification(
+        contentText: String,
+    ): Notification {
         val builder = NotificationCompat.Builder(this, CHANNEL_ID).apply {
             setContentTitle("Downloading repository")
             setContentText(contentText)
+            setSound(null)
             setSmallIcon(android.R.drawable.stat_sys_download)
-            if (progress != 0) {
-                setProgress(100, progress, false)
-            }
-            setOngoing(true) // Ensures the notification stays visible and persistent
+            setOngoing(true) // Ensures the notification stays visible while ongoing
             setPriority(NotificationCompat.PRIORITY_LOW)
         }
 
         return builder.build()
     }
 
-    private fun updateNotification(progress: Int) {
-        val notification = if (progress == 0) {
-            createNotification("Downloading...", 0)
+    private fun updateNotification(isCompleted: Boolean) {
+
+        val notification = if (isCompleted) {
+            createNotification("Download complete!")
         } else {
-            createNotification("Downloading... $progress%", progress)
+            createNotification("Downloading... ")
         }
+
+        // Update the notification
         notificationManager.notify(NOTIFICATION_ID, notification)
     }
 

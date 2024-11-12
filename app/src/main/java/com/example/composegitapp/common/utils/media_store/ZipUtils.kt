@@ -11,6 +11,7 @@ import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import androidx.annotation.RequiresApi
+import androidx.core.content.FileProvider
 import com.example.composegitapp.common.preferences.AppSettings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -47,7 +48,7 @@ class ZipUtils @Inject constructor(
         try {
             showLoader.invoke(true)
             val targetDirectory = extractZip(fileItem, uriItem)
-            openDirectoryInFileManager(targetDirectory.convertToContentDir(zipFileName))
+            openDirectoryInFileManager(targetDirectory, zipFileName)
         } catch (e: ActivityNotFoundException) {
             e.printStackTrace()
             showError.invoke("Установите файловый менеджер и попробуйте снова.")
@@ -181,22 +182,25 @@ class ZipUtils @Inject constructor(
         return fileUri
     }
 
-    private fun openDirectoryInFileManager(directory: Uri) {
+    private fun openDirectoryInFileManager(directory: File, zipFileName: String) {
         val intent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            // Для Android 10+ (API 29 и выше) используем FileProvider
-
-            val uri = directory
+            val uri = directory.convertToContentDir(zipFileName)
             Intent(Intent.ACTION_VIEW).apply {
                 setDataAndType(uri, DocumentsContract.Document.MIME_TYPE_DIR)
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
         } else {
-            // Для версий ниже Android 10 (API 29), просто используем прямой путь
-            val uri = directory
+
+            val uri = FileProvider.getUriForFile(
+                context,
+                "${context.packageName}.fileprovider",
+                directory
+            )
 
             Intent(Intent.ACTION_VIEW).apply {
                 setDataAndType(uri, DocumentsContract.Document.MIME_TYPE_DIR)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
         }

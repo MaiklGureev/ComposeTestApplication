@@ -1,6 +1,8 @@
 package com.example.composegitapp.ui.screen_menu
 
 import android.Manifest
+import android.content.Context
+import android.content.Intent
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -58,19 +60,26 @@ private fun CheckPermissions() {
         if (isGranted) {
             // Permission granted, proceed with accessing the storage
             context.showLongToast("Permission is granted")
+            restartApp(context)
         } else {
             // Handle the case where the permission is not granted
             context.showLongToast("Permission is not granted")
         }
     }
 
-
-    LaunchedEffect(key1 = Unit) {
+    LaunchedEffect(key1 = requestPermissionLauncher) {
         // Handle pre-Android 10 devices (legacy approach)
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             context.requestPermission(readStoragePermission, requestPermissionLauncher)
             context.requestPermission(writeStoragePermission, requestPermissionLauncher)
         }
-
     }
+}
+
+private fun restartApp(context: Context) {
+    val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
+    val componentName = intent!!.component
+    val mainIntent = Intent.makeRestartActivityTask(componentName)
+    context.startActivity(mainIntent)
+    Runtime.getRuntime().exit(0) // This will kill the app and restart it
 }

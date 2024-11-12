@@ -31,7 +31,7 @@ class MediaStoreWriterUtil @Inject constructor(
     fun writeFile(
         fileName: String,
         inputStream: InputStream,
-        updateNotification: (Int) -> Unit
+        updateNotification: (Boolean) -> Unit
     ): Uri? {
         val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             // Handle Android 10+ devices with MediaStore
@@ -54,7 +54,7 @@ class MediaStoreWriterUtil @Inject constructor(
     private fun writeFileToDownloadsWithMediaStore(
         fileName: String,
         inputStream: InputStream,
-        updateNotification: (Int) -> Unit
+        updateNotification: (Boolean) -> Unit
     ): Uri? {
 
         val contentValues = ContentValues().apply {
@@ -82,8 +82,9 @@ class MediaStoreWriterUtil @Inject constructor(
                         totalBytesWritten += bytesRead
 
                         val progress = calculateProgress(totalBytesWritten, fileSize)
-                        updateNotification(progress)
+                        //todo not worked
                     }
+                    updateNotification(true)
                     output.flush()
                 }
             }
@@ -102,7 +103,7 @@ class MediaStoreWriterUtil @Inject constructor(
     private fun writeFileToLegacyDownloads(
         fileName: String,
         inputStream: InputStream,
-        updateNotification: (Int) -> Unit
+        updateNotification: (Boolean) -> Unit
     ): Uri? {
         // Check if permission is granted to write to external storage
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -134,10 +135,8 @@ class MediaStoreWriterUtil @Inject constructor(
                     while (input.read(buffer).also { bytesRead = it } != -1) {
                         output.write(buffer, 0, bytesRead)
                         totalBytesWritten += bytesRead
-
-                        val progress = calculateProgress(totalBytesWritten, fileSize)
-                        updateNotification(progress)
                     }
+                    updateNotification(true)
                     output.flush()
                 }
             }
