@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.example.composegitapp.common.extension.openAppPermissionSettings
 import com.example.composegitapp.common.extension.showLongToast
 import com.example.composegitapp.common.utils.downloads.IDownloadManager
@@ -72,7 +73,9 @@ fun RepoBranchesContent(
                 Text(
                     text = uiState.errorMessage,
                     color = MaterialTheme.colorScheme.error,
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(20.dp)
                 )
             }
 
@@ -98,7 +101,9 @@ fun RepoBranchesContent(
             else -> {
                 Text(
                     text = stringResource(id = R.string.no_repos),
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(20.dp)
                 )
             }
         }

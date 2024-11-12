@@ -13,6 +13,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.example.composegitapp.ui.design_system.LoadingItem
 import com.example.composegitapp.ui.screen_downloads.RepoDownloadsViewModel
 import com.gureev.ComposeAppGitHub.R
@@ -43,7 +44,9 @@ fun RepoDownloadsContent(
                 Text(
                     text = uiState.errorMessage,
                     color = MaterialTheme.colorScheme.error,
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(20.dp)
                 )
             }
 
@@ -65,7 +68,9 @@ fun RepoDownloadsContent(
             else -> {
                 Text(
                     text = stringResource(id = R.string.no_downloads),
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(20.dp)
                 )
             }
         }

@@ -13,6 +13,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.composegitapp.ui.NavigationScreens
 import com.example.composegitapp.ui.design_system.LoadingItem
@@ -44,7 +45,9 @@ fun SearchUserReposContent(
                 Text(
                     text = uiState.errorMessage,
                     color = MaterialTheme.colorScheme.error,
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(20.dp)
                 )
             }
 
@@ -67,7 +70,9 @@ fun SearchUserReposContent(
             else -> {
                 Text(
                     text = stringResource(id = R.string.no_repos),
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(20.dp)
                 )
             }
         }
