@@ -91,6 +91,9 @@ class NetworkModule {
                 followSslRedirects(true)
                 sslSocketFactory(sslContext.socketFactory, trustAllCerts[0] as X509TrustManager)
                 hostnameVerifier { _, _ -> true }
+                connectTimeout(30, TimeUnit.SECONDS)
+                readTimeout(30, TimeUnit.SECONDS)
+                writeTimeout(30, TimeUnit.SECONDS)
             }
         } catch (e: Exception) {
             return OkHttpClient.Builder()
