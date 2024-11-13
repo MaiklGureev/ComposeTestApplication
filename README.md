@@ -12,7 +12,7 @@
 
 Вот краткий видео-превью приложения, которое показывает его основные возможности и интерфейс:
 
-![Preview](ComposeTestApplication/demo/Screen_recording_20241113_025444.mp4)
+![Preview](demo/Screen_recording_20241113_025444.mp4)
 
 ---
 
