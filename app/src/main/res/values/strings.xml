@@ -6,6 +6,7 @@
     <string name="search_users">Поиск пользователей</string>
 
     <string name="downloads">Загрузки</string>
+    <string name="reset_token">Сбросить токен</string>
     <string name="user_login">Никнейм:</string>
     <string name="repo_name">Репозиторий:</string>
     <string name="branch_name">Ветка:</string>
@@ -15,4 +16,8 @@
     <string name="empty">пусто</string>
     <string name="no_repos">Список репозиториев пуст</string>
     <string name="no_downloads">Список загрузок пуст</string>
+    <string name="exit">Выход</string>
+    <string name="github_token">GitHub Token</string>
+    <string name="enter_github_token_for_continue">Введите ваш GitHub Token для продолжения.</string>
+    <string name="enter_github_token">Введите ваш GitHub Token.</string>
 </resources>

@@ -9,7 +9,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -28,9 +29,9 @@ fun SearchUserReposContent(
     navHostController: NavHostController
 ) {
     val uiState = viewModel.uiState.value
-    LaunchedEffect(key1 = Unit) {
-        viewModel.searchRepos(userName)
-    }
+
+    FirstLoadingData(viewModel, userName)
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -76,6 +77,19 @@ fun SearchUserReposContent(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun FirstLoadingData(
+    viewModel: UserReposViewModel,
+    userName: String
+) {
+    val hasLaunched = rememberSaveable { mutableStateOf(false) }
+
+    if (!hasLaunched.value) {
+        viewModel.searchRepos(userName)
+        hasLaunched.value = true
     }
 }
 

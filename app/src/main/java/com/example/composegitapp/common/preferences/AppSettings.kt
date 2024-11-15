@@ -12,7 +12,7 @@ class AppSettings @Inject constructor(
     private val sharedPreferences: SharedPreferences
 ) : IAppSettings {
 
-    override val accessToken: String = TOKEN
+    override val accessToken: String = sharedPreferences.getString(TOKEN_KEY, null).orEmpty()
 
     override fun saveToken(token: String) {
         val editor = sharedPreferences.edit()
@@ -20,8 +20,8 @@ class AppSettings @Inject constructor(
         editor.apply()
     }
 
-    override fun getToken(): String? {
-        return sharedPreferences.getString(TOKEN_KEY, null)
+    override fun isTokenFilled(): Boolean {
+        return sharedPreferences.getString(TOKEN_KEY, null).orEmpty().isNotEmpty()
     }
 
     override fun removeToken() {
@@ -39,9 +39,6 @@ class AppSettings @Inject constructor(
     }
 
     companion object {
-        private const val TOKEN =
-            "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"
-
         private const val TOKEN_KEY = "TOKEN_KEY"
     }
 }
@@ -52,6 +49,6 @@ interface IAppSettings {
     fun getAppName(): String
 
     fun saveToken(token: String)
-    fun getToken(): String?
+    fun isTokenFilled(): Boolean
     fun removeToken()
 }

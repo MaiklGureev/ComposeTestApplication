@@ -20,7 +20,8 @@ import com.gureev.ComposeAppGitHub.R
 fun MenuContent(
     onSearchReposClicked: () -> Unit = {},
     onSearchUsersClicked: () -> Unit = {},
-    onDownloadsClicked: () -> Unit = {}
+    onDownloadsClicked: () -> Unit = {},
+    onResetTokenClicked: () -> Unit = {}
 ) {
     Box(
         contentAlignment = Alignment.Center,
@@ -38,12 +39,23 @@ fun MenuContent(
                 text = stringResource(id = R.string.search_repos)
             )
             Spacer(modifier = Modifier.height(20.dp))
+
             MenuButton(
                 onClick = onSearchUsersClicked,
                 text = stringResource(id = R.string.search_users)
             )
             Spacer(modifier = Modifier.height(20.dp))
-            MenuButton(onClick = onDownloadsClicked, text = stringResource(id = R.string.downloads))
+
+            MenuButton(
+                onClick = onDownloadsClicked,
+                text = stringResource(id = R.string.downloads)
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+
+            MenuButton(
+                onClick = onResetTokenClicked,
+                text = stringResource(id = R.string.reset_token)
+            )
         }
     }
 

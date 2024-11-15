@@ -5,15 +5,19 @@ import android.content.ContentResolver
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Environment
+import androidx.lifecycle.ViewModel
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
 import com.example.composegitapp.common.preferences.AppSettings
 import com.example.composegitapp.common.preferences.IAppSettings
 import com.example.composegitapp.common.utils.downloads.DownloadManager
 import com.example.composegitapp.common.utils.downloads.IDownloadManager
+import com.example.composegitapp.di.view_model.ViewModelKey
+import com.example.composegitapp.ui.screen_menu.MainMenuViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import dagger.multibindings.IntoMap
 import java.io.File
 import javax.inject.Qualifier
 import javax.inject.Singleton
@@ -70,6 +74,11 @@ interface AppModuleBind {
     @Singleton
     @Binds
     fun bindDownloadManager(bindImpl: DownloadManager): IDownloadManager
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(MainMenuViewModel::class)
+    fun bindMainMenuViewModel(viewModel: MainMenuViewModel): ViewModel
 }
 
 @Qualifier

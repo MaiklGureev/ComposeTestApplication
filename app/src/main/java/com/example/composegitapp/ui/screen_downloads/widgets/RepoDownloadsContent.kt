@@ -9,7 +9,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -25,10 +26,8 @@ fun RepoDownloadsContent(
 ) {
     val uiState = viewModel.uiState.value
 
+    FirstLoadingData(viewModel)
 
-    LaunchedEffect(key1 = Unit) {
-        viewModel.getRepoDownloads()
-    }
 
     Column(
         modifier = Modifier
@@ -74,5 +73,15 @@ fun RepoDownloadsContent(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun FirstLoadingData(viewModel: RepoDownloadsViewModel) {
+    val hasLaunched = rememberSaveable { mutableStateOf(false) }
+
+    if (!hasLaunched.value) {
+        viewModel.getRepoDownloads()
+        hasLaunched.value = true
     }
 }

@@ -9,9 +9,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -32,6 +33,7 @@ fun RepoBranchesContent(
     viewModel: UserRepoBranchesViewModel,
 ) {
     val uiState = viewModel.uiState.value
+    FirstLoadingData(viewModel, userName, repoName)
 
     val downloadEvent by viewModel.eventDownloads.collectAsState(initial = IDownloadManager.DownloadEvents.Empty)
     val context = LocalContext.current
@@ -55,9 +57,6 @@ fun RepoBranchesContent(
         else -> Unit
     }
 
-    LaunchedEffect(key1 = Unit) {
-        viewModel.getRepoBranches(userName, repoName)
-    }
 
     Column(
         modifier = Modifier
@@ -107,5 +106,19 @@ fun RepoBranchesContent(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun FirstLoadingData(
+    viewModel: UserRepoBranchesViewModel,
+    userName: String,
+    repoName: String
+) {
+    val hasLaunched = rememberSaveable { mutableStateOf(false) }
+
+    if (!hasLaunched.value) {
+        viewModel.getRepoBranches(userName, repoName)
+        hasLaunched.value = true
     }
 }
